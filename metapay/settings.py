@@ -32,12 +32,17 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    
+    'jazzmin',
+
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
 
     'core',
     'userauths',
@@ -135,3 +140,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+JAZZMIN_SETTINGS = {
+    # "site_title": "MetaPay",
+    "site_header": "MetaPay",
+    "site_brand": "Payment Made Easy...",
+    # "site_logo": "images/logo.jpg",
+    "copyright": "MetaPay - All RIght Reserverd © Copyright 2023",
+    # "order_with_respect_to": ["core", 'userauths', "transactions" , 'addon', 'blog']
+    
+}
