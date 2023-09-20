@@ -58,6 +58,13 @@ class Account(models.Model):
     def __str__(self):
         return f"{self.user}"
 
+def create_account(sender, instance, created, **kwargs):
+    if created:
+        Account.objects.create(user=instance)
+        instance.save()
+
+post_save.connect(create_account, sender=User)
+
 
 
 
