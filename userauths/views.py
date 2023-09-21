@@ -19,11 +19,11 @@ def RegisterView(request):
             new_user = authenticate(username=form.cleaned_data['email'],
                                     password=form.cleaned_data['password1'])
             login(request, new_user)
-            return redirect("core:index")
+            return redirect("account:account")
     
     if request.user.is_authenticated:
         messages.warning(request, f"You are already logged in.")
-        return redirect("core:index")
+        return redirect("account:account")
 
 
     else:
@@ -46,7 +46,7 @@ def LoginView(request):
             if user is not None: # if there is a user
                 login(request, user)
                 messages.success(request, "You are logged.")
-                return redirect("core:index")
+                return redirect("account:account")
             else:
                 messages.warning(request, "Username or password does not exist")
                 return redirect("userauths:sign-in")

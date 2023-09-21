@@ -179,7 +179,7 @@
                                         </div>
                                         <div class="profile-head">
                                             <a href="{% url 'core:index' %}">
-                                                <h5>{{kyc.full_name|title}}</h5>
+                                                <h6>{{kyc.full_name|title}}</h6>
                                             </a>
                                             <p class="wallet-id"><small>Account No. {{ request.user.account.account_number }}</small></p>
                                             <p class="wallet-id"><small>Pin No. {{ request.user.account.pin_number }}</small></p>
