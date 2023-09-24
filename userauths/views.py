@@ -20,6 +20,9 @@ def RegisterView(request):
                                     password=form.cleaned_data['password1'])
             login(request, new_user)
             return redirect("account:account")
+        else:
+            messages.warning(request, "Password must contains at least 8 characters(number and alphabet)")
+
     
     if request.user.is_authenticated:
         messages.warning(request, f"You are already logged in.")
