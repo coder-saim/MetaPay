@@ -1,6 +1,5 @@
 {% extends "partials/dashboard-base.html" %}
 {% load static %}
-{% load humanize %}
 {% block content %}
 
     <!-- Dashboard Section start -->
@@ -19,10 +18,10 @@
                                 <div class="top-area">
                                     <div class="left-side">
                                         <h5>Hi, {{kyc.full_name|title}}!</h5>
-                                        <h2>${{account.account_balance|intcomma}}</h2>
+                                        <h2>${{account.account_balance}}</h2>
                                         
                                         {% for recent_recieved_transfer in recent_recieved_transfer %}
-                                        <h5 class="receive">Last Received <span>${{recent_recieved_transfer.amount|intcomma}}</span></h5>
+                                        <h5 class="receive">Last Received <span>${{recent_recieved_transfer.amount}}</span></h5>
                                             
                                         {% endfor %}
                                             
@@ -47,7 +46,7 @@
                                         <div class="right-bottom">
                                             
                                             {% for recent_transfer in recent_transfer %}
-                                                <h4><small>${{recent_transfer.amount|intcomma}}</small></h4>
+                                                <h4><small>${{recent_transfer.amount}}</small></h4>
                                             {% endfor %}
                                             <h5><small>Recent Transfer</small></h5>
                                         </div>
@@ -56,9 +55,7 @@
                                 </div>
                                 <div class="bottom-area">
                                     <div class="left-side">
-                                        <a href="{% url 'core:search-account' %}" class="cmn-btn">Transfer Money</a>
-                                        <a href="{% url 'core:request-search-account' %}" class="cmn-btn">Receive Money</a>
-                                        <a href="withdraw-money-step-1.html" class="cmn-btn">All Cards</a>
+                                        <p>link reqired</p>
                                     </div>
                                     <div class="right-side">
                                         <div class="dropdown-area">
@@ -93,7 +90,6 @@
                                         </li>
                                     </ul>
                                     <div class="view-all d-flex align-items-center">
-                                        <a href="{% url 'core:transactions' %}">View All</a>
                                         <img src="{% static 'assets1/images/icon/right-arrow.png' %}" alt="icon">
                                     </div>
                                 </div>
@@ -137,10 +133,9 @@
                                                                 {% endif %}
                                                             </td>
                                                             <td>
-                                                                <p>-${{s.amount|intcomma}}</p>
+                                                                <p>-${{s.amount}}</p>
                                                             </td>
                                                             <td>
-                                                                <a href="{% url 'core:transaction-detail' s.transaction_id %}" class=""><i class="fas fa-eye"></i></a>
 
                                                             </td>
                                                         </tr>
@@ -189,10 +184,9 @@
                                                                 {% endif %}
                                                             </td>
                                                             <td>
-                                                                <p>+${{s.amount|intcomma}}</p>
+                                                                <p>+${{s.amount}}</p>
                                                             </td>
                                                             <td>
-                                                                <a href="{% url 'core:transaction-detail' s.transaction_id %}" class=""><i class="fas fa-eye"></i></a>
                                                             </td>
                                                         </tr>
                                                     {% endfor %}
@@ -249,7 +243,7 @@
                                                                 {% endif %}
                                                             </td>
                                                             <td>
-                                                                <p>+${{s.amount|intcomma}}</p>
+                                                                <p>+${{s.amount}}</p>
                                                             </td>
                                                             <td>
                                                                 {% if s.status == "request_sent" %}
@@ -322,7 +316,7 @@
                                                                 {% endif %}
                                                             </td>
                                                             <td>
-                                                                <p>+${{s.amount|intcomma}}</p>
+                                                                <p>+${{s.amount}}</p>
                                                             </td>
                                                             <td>
                                                                 
@@ -384,7 +378,7 @@
                                                     </div>
                                                     <div class="bottom_card">
                                                         <div class="card_info">
-                                                        <div class="card_holder_name">${{c.amount|intcomma}}</div>
+                                                        <div class="card_holder_name">${{c.amount}}</div>
                                                         <div class="card_holder_name">{{c.name}}</div>
                                                         </div>
                                                         <div class="card_info">
