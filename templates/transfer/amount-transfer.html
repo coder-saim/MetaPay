@@ -1,6 +1,6 @@
 {% extends "partials/dashboard-base.html" %}
 {% load static %}
-{% load humanize %}
+
 {% block content %}
     <!-- Dashboard Section start -->
     <section class="dashboard-section body-collapse pay step step-2">
@@ -10,7 +10,7 @@
                     <div class="head-area d-flex align-items-center justify-content-between">
                         <h4>Make a Payment</h4>
                         <div class="icon-area">
-                            <img src="{% static 'assets1/images/icon/support-icon.png' %}" alt="icon">
+                            <img src="{% static 'assets1/images/icon/pay.png' %}" alt="icon">
                         </div>
                     </div>
                     <div class="choose-recipient">
@@ -35,7 +35,7 @@
                                 <div class="right">
                                     
                                     <a href="{% url 'core:search-account' %}">
-                                        <i class="icon-h-edit"></i>
+                                    
                                         Edit
                                     </a>
                                 </div>
@@ -47,14 +47,14 @@
                         <div class="send-banance">
                             <span class="mdr">You Send</span>
                             <div class="input-area">
-                                <input class="xxlr" onkeyup="CalculateBalance()" placeholder="{{request.user.account.account_balance|intcomma}}" type="number" name="amount-send" id="amount-send">
+                                <input class="xxlr" onkeyup="CalculateBalance()" placeholder="{{request.user.account.account_balance}}" type="number" name="amount-send" id="amount-send">
                                 <select>
                                     <option value="1">USD</option>
-                                    <option value="2">USD</option>
-                                    <option value="3">USD</option>
+                                    <option value="2">BDT</option>
+                                    <option value="3">EUR</option>
                                 </select>
                             </div>
-                            <p>Available Balance<b>${{request.user.account.account_balance|intcomma}}</b></p>
+                            <p>Available Balance<b>${{request.user.account.account_balance}}</b></p>
                             <p id="new_balance"></p>
                             <p class="text-danger" id="error-div"></p>
                         </div>
@@ -63,7 +63,7 @@
                         <div class="send-banance pt-0 mt-0">
                             <span class="mdr">Payment Description</span>
                             <div class="input-area">
-                                <input class="xxlr" onkeyup="CalculateBalance()" placeholder="Payment for fees" type="text" name="description">
+                                <input class="xxlr" onkeyup="CalculateBalance()" placeholder="Payment for What?" type="text" name="description">
                                 
                             </div>
                         </div>
