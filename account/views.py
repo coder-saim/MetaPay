@@ -4,7 +4,7 @@ from account.forms import KYCForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from core.forms import CreditCardForm
-from core.models import Transaction, CreditCard
+from core.models import Notification, Transaction, CreditCard
 
 
 
@@ -88,10 +88,12 @@ def dashboard(request):
                 new_form.user = request.user 
                 new_form.save()
                 
-                # Notification.objects.create(
-                #     user=request.user,
-                #     notification_type="Added Credit Card"
-                # )
+                Notification.objects.create(
+                    user=request.user,
+                    notification_type="Added Credit Card"
+                )
+
+                
                 
                 card_id = new_form.card_id
                 messages.success(request, "Card Added Successfully.")
@@ -103,6 +105,9 @@ def dashboard(request):
         messages.warning(request, "You need to login to access the dashboard")
         return redirect("userauths:sign-in")
 
+    notifications = Notification.objects.all()
+    print(notifications)
+
     context = {
         "kyc":kyc,
         "account":account,
@@ -110,6 +115,8 @@ def dashboard(request):
         "credit_card":credit_card,
         "sender_transaction":sender_transaction,
         "reciever_transaction":reciever_transaction,
+
+        "notifications":notifications,
 
         'request_sender_transaction':request_sender_transaction,
         'request_reciever_transaction':request_reciever_transaction,

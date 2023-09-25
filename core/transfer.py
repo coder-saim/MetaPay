@@ -4,9 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib import messages
 from decimal import Decimal
-
-from core.models import Transaction
-# from core.models import Transaction, Notification
+from core.models import Transaction, Notification
  
 
 @login_required
@@ -128,17 +126,17 @@ def TransferProcess(request, account_number, transaction_id):
             print(account.account_balance)
             
             # Create Notification Object
-            # Notification.objects.create(
-            #     amount=transaction.amount,
-            #     user=account.user,
-            #     notification_type="Credit Alert"
-            # )
+            Notification.objects.create(
+                amount=transaction.amount,
+                user=account.user,
+                notification_type="Credit Alert"
+            )
             
-            # Notification.objects.create(
-            #     user=sender,
-            #     notification_type="Debit Alert",
-            #     amount=transaction.amount
-            # )
+            Notification.objects.create(
+                user=sender,
+                notification_type="Debit Alert",
+                amount=transaction.amount
+            )
 
             messages.success(request, "Transfer Successfull.")
             return redirect("core:transfer-completed", account.account_number, transaction.transaction_id)

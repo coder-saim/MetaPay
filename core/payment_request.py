@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib import messages
 from decimal import Decimal
-from core.models import Transaction
+from core.models import Notification, Transaction
 from decimal import Decimal
 
 @login_required
@@ -87,18 +87,18 @@ def AmountRequestFinalProcess(request, account_number, transaction_id):
             transaction.status = "request_sent"
             transaction.save()
             
-            # Notification.objects.create(
-            #     user=account.user,
-            #     notification_type="Recieved Payment Request",
-            #     amount=transaction.amount,
+            Notification.objects.create(
+                user=account.user,
+                notification_type="Recieved Payment Request",
+                amount=transaction.amount,
                 
-            # )
+            )
             
-            # Notification.objects.create(
-            #     user=request.user,
-            #     amount=transaction.amount,
-            #     notification_type="Sent Payment Request"
-            # )
+            Notification.objects.create(
+                user=request.user,
+                amount=transaction.amount,
+                notification_type="Sent Payment Request"
+            )
 
             messages.success(request, "Your payment request have been sent successfully.")
             return redirect("core:amount-request-completed", account.account_number, transaction.transaction_id)
