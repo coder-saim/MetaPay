@@ -259,13 +259,13 @@
                                                                 {% endif %}
                                                             </td>
                                                             <td>
-                                                                <p>+${{s.amount}}</p>
+                                                                <p>-${{s.amount}}</p>
                                                             </td>
                                                             <td>
                                                                 
                                                                 {% if s.status == "request_sent" %}
                                                                     <a href="{% url 'core:settlement-confirmation' s.sender.account.account_number s.transaction_id %}" class="btn btn-primary"><i class="fas fa-check-circle"></i> Settle</a>
-                                                                    <a href="{% url 'core:transaction-detail' s.transaction_id %}" class=" btn btn-danger"> <i class="fas fa-x"></i> Cancel</a>
+                                                                    <a href="{% url 'core:transaction-detail' s.transaction_id %}" class=" btn btn-danger"> <i class="fa-solid fa-circle-info"></i> Details</a>
                                                                 {% endif %}
 
                                                                 {% if s.status == "request_settled" %}

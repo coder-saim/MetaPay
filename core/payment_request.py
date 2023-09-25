@@ -181,6 +181,9 @@ def deletepaymentrequest(request, account_number ,transaction_id):
     account = Account.objects.get(account_number=account_number)
     transaction = Transaction.objects.get(transaction_id=transaction_id)
 
+    print(request.user) 
+    print(transaction.reciever)
+
     if request.user == transaction.user:
         transaction.delete()
         messages.success(request, "Payment Request Deleted Sucessfully")
