@@ -3,8 +3,8 @@ from account.models import KYC, Account
 from account.forms import KYCForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-# from core.forms import CreditCardForm
-from core.models import Transaction
+from core.forms import CreditCardForm
+from core.models import Transaction, CreditCard
 
 
 
@@ -79,25 +79,25 @@ def dashboard(request):
         
         
         account = Account.objects.get(user=request.user)
-        # credit_card = CreditCard.objects.filter(user=request.user).order_by("-id")
+        credit_card = CreditCard.objects.filter(user=request.user).order_by("-id")
 
-        # if request.method == "POST":
-        #     form = CreditCardForm(request.POST)
-        #     if form.is_valid():
-        #         new_form = form.save(commit=False)
-        #         new_form.user = request.user 
-        #         new_form.save()
+        if request.method == "POST":
+            form = CreditCardForm(request.POST)
+            if form.is_valid():
+                new_form = form.save(commit=False)
+                new_form.user = request.user 
+                new_form.save()
                 
-        #         Notification.objects.create(
-        #             user=request.user,
-        #             notification_type="Added Credit Card"
-        #         )
+                # Notification.objects.create(
+                #     user=request.user,
+                #     notification_type="Added Credit Card"
+                # )
                 
-        #         card_id = new_form.card_id
-        #         messages.success(request, "Card Added Successfully.")
-        #         return redirect("account:dashboard")
-        # else:
-        #     form = CreditCardForm()
+                card_id = new_form.card_id
+                messages.success(request, "Card Added Successfully.")
+                return redirect("account:dashboard")
+        else:
+            form = CreditCardForm()
 
     else:
         messages.warning(request, "You need to login to access the dashboard")
@@ -106,8 +106,8 @@ def dashboard(request):
     context = {
         "kyc":kyc,
         "account":account,
-        # "form":form,
-        # "credit_card":credit_card,
+        "form":form,
+        "credit_card":credit_card,
         "sender_transaction":sender_transaction,
         "reciever_transaction":reciever_transaction,
 
