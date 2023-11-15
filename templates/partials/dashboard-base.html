@@ -228,7 +228,7 @@
                                     <img src="{% static 'assets1/images/icon/receive.png' %}" alt="Receive"> <span>Receive</span>
                                 </a>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <a href="money-exchange.html">
                                     <img src="{% static 'assets1/images/icon/exchange.png' %}" alt="Exchange"> <span>Exchange</span>
                                 </a>
@@ -252,7 +252,7 @@
                                 <a href="withdraw-money-step-1.html">
                                     <img src="{% static 'assets1/images/icon/withdraw.png' %}" alt="Withdraw"> <span>Withdraw Money</span>
                                 </a>
-                            </li>
+                            </li> -->
                         </ul>
                         <ul class="bottom-item">
                             <li class="active">
@@ -261,17 +261,17 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)">
+                                <a href="{% url "core:index" %}">
                                     <img src="{% static 'assets1/images/icon/support.png' %}" alt="Support"> <span>Support</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)">
+                                <a href="{% url "core:index" %}">
                                     <img src="{% static 'assets1/images/icon/quit.png' %}" alt="Quit"> <span>Quit</span>
                                 </a>
                             </li>
                         </ul>
-                        <div class="pt-120">
+                        <!-- <div class="pt-120">
                             <div class="invite-now">
                                 <div class="img-area">
                                     <img src="{% static 'assets1/images/invite-now-illus.png' %}" alt="Image">
@@ -279,7 +279,7 @@
                                 <p>Invite your friend and get $25</p>
                                 <a href="javascript:void(0)" class="cmn-btn">Invite Now</a>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
