@@ -453,28 +453,28 @@
                                                 <div class="text-area">
                                                     
                                                     {% if n.notification_type == "Credit Alert" %}
-                                                    <p class="mdr">You received a payment of <b>${{n.amount}}</b></p>
+                                                    <p class="mdr" style="text-transform: capitalize;">{{n.user}} received a payment of <b>${{n.amount}}</b></p>
                                                     {% endif %}
                                                     {% if n.notification_type == "Debit Alert" %}
-                                                    <p class="mdr">You sent a payment of <b>${{n.amount}}</b></p>
+                                                    <p class="mdr" style="text-transform: capitalize;">{{n.user}} sent a payment of <b>${{n.amount}}</b></p>
                                                     {% endif %}
                                                     {% if n.notification_type == "Sent Payment Request" %}
-                                                    <p class="mdr">You sent a <b>payment request</b> of <b>${{n.amount}}</b></p>
+                                                    <p class="mdr" style="text-transform: capitalize;">{{n.user}} sent a <b>payment request</b> of <b>${{n.amount}}</b></p>
                                                     {% endif %}
                                                     {% if n.notification_type == "Recieved Payment Request" %}
-                                                    <p class="mdr">You received a <b>payment request</b> of <b>${{n.amount}}</b></p>
+                                                    <p class="mdr" style="text-transform: capitalize;">{{n.user}} received a <b>payment request</b> of <b>${{n.amount}}</b></p>
                                                     {% endif %}
                                                     {% if n.notification_type == "Funded Credit Card" %}
-                                                    <p class="mdr">You funded your credit card with <b>${{n.amount}}</b></p>
+                                                    <p class="mdr" style="text-transform: capitalize;">{{n.user}} funded your credit card with <b>${{n.amount}}</b></p>
                                                     {% endif %}
                                                     {% if n.notification_type == "Withdrew Credit Card Funds" %}
-                                                    <p class="mdr">You withdrew <b>${{n.amount}}</b> from your credit card</p>
+                                                    <p class="mdr" style="text-transform: capitalize;">{{n.user}} withdrew <b>${{n.amount}}</b> from your credit card</p>
                                                     {% endif %}
                                                     {% if n.notification_type == "Deleted Credit Card" %}
-                                                    <p class="mdr">You deleted your credit card</p>
+                                                    <p class="mdr" style="text-transform: capitalize;">{{n.user}} deleted your credit card</p>
                                                     {% endif %}
                                                     {% if n.notification_type == "Added Credit Card" %}
-                                                    <p class="mdr">You added a new  credit card</p>
+                                                    <p class="mdr" style="text-transform: capitalize;">{{n.user}} added a new  credit card</p>
                                                     {% endif %}
                                                         
                                                     <p class="mdr time-area">{{n.date}}</p>
