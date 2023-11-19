@@ -1,68 +1,59 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.shortcuts import render, redirect
+from .forms import UserRegisterForm
+from .singleton import AuthenticationSingleton
 
-from userauths.models import User
-from userauths.forms import UserRegisterForm
+auth_singleton = AuthenticationSingleton()
 
 def RegisterView(request):
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
         print(form.is_valid())
         if form.is_valid():
-            # form.save()
-            new_user = form.save() # new_user.email
+            new_user = form.save()
             username = form.cleaned_data.get("username")
-            # username = request.POST.get("username")
             messages.success(request, f"Hey {username}, your account was created successfully.")
-            # new_user = authenticate(username=form.cleaned_data.get('email'))
-            new_user = authenticate(username=form.cleaned_data['email'],
-                                    password=form.cleaned_data['password1'])
-            login(request, new_user)
-            return redirect("account:account")
+            success, message = auth_singleton.login_user(request, email=form.cleaned_data['email'], password=form.cleaned_data['password1'])
+            if success:
+                return redirect("account:account")
+            else:
+                messages.warning(request, message)
         else:
-            messages.warning(request, "Password must contains at least 8 characters(number and alphabet)")
+            messages.warning(request, "Password must contain at least 8 characters (number and alphabet)")
 
-    
     if request.user.is_authenticated:
         messages.warning(request, f"You are already logged in.")
         return redirect("account:account")
-
 
     else:
         form = UserRegisterForm()
     context = {
         "form": form
     }
-    return render(request, "userauths/sign-up.html",context)
+    return render(request, "userauths/sign-up.html", context)
 
- 
 def LoginView(request):
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
 
-        try:
-            user = User.objects.get(email=email)
-            user = authenticate(request, email=email, password=password)
-
-            if user is not None: # if there is a user
-                login(request, user)
-                messages.success(request, "You are logged.")
-                return redirect("account:account")
-            else:
-                messages.warning(request, "Username or password does not exist")
-                return redirect("userauths:sign-in")
-        except:
-            messages.warning(request, "User does not exist")
+        success, message = auth_singleton.login_user(request, email=email, password=password)
+        if success:
+            messages.success(request, message)
+            return redirect("account:account")
+        else:
+            messages.warning(request, message)
 
     if request.user.is_authenticated:
-        messages.warning(request, "You are already logged In")
+        messages.warning(request, "You are already logged in")
         return redirect("account:account")
-        
+
     return render(request, "userauths/sign-in.html")
 
 def logoutView(request):
-    logout(request)
-    messages.success(request, "You have been logged out.")
+    success, message = auth_singleton.logout_user(request)
+    if success:
+        messages.success(request, message)
+    else:
+        messages.warning(request, message)
     return redirect("userauths:sign-in")
