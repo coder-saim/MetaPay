@@ -5,9 +5,40 @@ from django.db.models import Q
 from django.contrib import messages
 from decimal import Decimal
 from core.models import Notification, Transaction
-from decimal import Decimal
 
-@login_required
+
+
+def login_required_decorator(func):
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return func(request, *args, **kwargs)
+        else:
+            messages.warning(request, "You need to log in.")
+            return redirect("account:login")
+    return wrapper
+
+
+def validate_amount_decorator(func):
+    def wrapper(request, *args, **kwargs):
+        amount = request.POST.get("amount-request")
+        if not amount or not amount.isdigit() or Decimal(amount) <= 0:
+            messages.warning(request, "Invalid amount.")
+            return redirect("core:amount-request", kwargs['account_number'])
+        return func(request, *args, **kwargs)
+    return wrapper
+
+
+def validate_pin_decorator(func):
+    def wrapper(request, *args, **kwargs):
+        pin_number = request.POST.get("pin-number")
+        if not pin_number or pin_number != request.user.account.pin_number:
+            messages.warning(request, "Incorrect Pin.")
+            return redirect('core:amount-request-completion', kwargs['account_number'], kwargs['transaction_id'])
+        return func(request, *args, **kwargs)
+    return wrapper
+
+
+@login_required_decorator
 def SearchUsersRequest(request):
     account = Account.objects.all() ## all the account in my db
     query = request.POST.get("account_number") ## <input name="account_number">
@@ -25,6 +56,10 @@ def SearchUsersRequest(request):
     }
     return render(request, "payment_request/search-users.html", context)
 
+
+
+@staticmethod
+@login_required_decorator
 def AmountRequest(request, account_number):
     account = Account.objects.get(account_number=account_number)
     context = {
@@ -32,6 +67,10 @@ def AmountRequest(request, account_number):
     }
     return render(request, "payment_request/amount-request.html", context)
 
+
+@staticmethod
+@login_required_decorator
+@validate_amount_decorator
 def AmountRequestProcess(request, account_number):
     account = Account.objects.get(account_number=account_number)
 
@@ -66,6 +105,9 @@ def AmountRequestProcess(request, account_number):
         messages.warning(request, "Error Occured, try again later.")
         return redirect("account:dashboard")
 
+
+@staticmethod
+@login_required_decorator
 def AmountRequestConfirmation(request, account_number, transaction_id):
     account = Account.objects.get(account_number=account_number)
     transaction = Transaction.objects.get(transaction_id=transaction_id)
@@ -77,6 +119,9 @@ def AmountRequestConfirmation(request, account_number, transaction_id):
     return render(request, "payment_request/amount-request-confirmation.html", context)
 
 
+@staticmethod
+@login_required_decorator
+@validate_pin_decorator
 def AmountRequestFinalProcess(request, account_number, transaction_id):
     account = Account.objects.get(account_number=account_number)
     transaction = Transaction.objects.get(transaction_id=transaction_id)
@@ -122,6 +167,9 @@ def RequestCompleted(request, account_number ,transaction_id):
 
 
 ################################## Settled ##########################3
+
+@staticmethod
+@login_required_decorator
 def settlement_confirmation(request, account_number ,transaction_id):
     account = Account.objects.get(account_number=account_number)
     transaction = Transaction.objects.get(transaction_id=transaction_id)
@@ -133,6 +181,10 @@ def settlement_confirmation(request, account_number ,transaction_id):
     return render(request, "payment_request/settlement-confirmation.html", context)
 
 
+
+@staticmethod
+@login_required_decorator
+@validate_pin_decorator
 def settlement_processing(request, account_number, transaction_id):
     account = Account.objects.get(account_number=account_number)
     transaction = Transaction.objects.get(transaction_id=transaction_id)
@@ -165,7 +217,8 @@ def settlement_processing(request, account_number, transaction_id):
         messages.warning(request, "Error Occured")
         return redirect("account:dashboard")
 
-
+@staticmethod
+@login_required_decorator
 def SettlementCompleted(request, account_number ,transaction_id):
     account = Account.objects.get(account_number=account_number)
     transaction = Transaction.objects.get(transaction_id=transaction_id)
@@ -177,6 +230,9 @@ def SettlementCompleted(request, account_number ,transaction_id):
     return render(request, "payment_request/settlement-completed.html", context)
 
 
+
+@staticmethod
+@login_required_decorator
 def deletepaymentrequest(request, account_number ,transaction_id):
     account = Account.objects.get(account_number=account_number)
     transaction = Transaction.objects.get(transaction_id=transaction_id)

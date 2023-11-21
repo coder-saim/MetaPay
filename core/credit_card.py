@@ -4,6 +4,54 @@ from django.contrib.auth.decorators import login_required
 from core.models import CreditCard, Notification
 from account.models import Account
 from decimal import Decimal
+from abc import ABC, abstractmethod
+
+
+
+
+class Credit_Card(ABC):
+    @abstractmethod
+    def get_card_type(self):
+        pass
+
+
+class VerveCard(CreditCard):
+    def get_card_type(self):
+        return "Verve"
+    
+
+class VisaCard(CreditCard):
+    def get_card_type(self):
+        return "Visa"
+
+
+class MasterCard(CreditCard):
+    def get_card_type(self):
+        return "MasterCard"
+
+
+class CreditCardFactory(ABC):
+    @abstractmethod
+    def create_credit_card(self):
+        pass
+
+class VerveCardFactory(CreditCardFactory):
+    def create_credit_card(self):
+        return VerveCard()
+    
+
+class VisaCardFactory(CreditCardFactory):
+    def create_credit_card(self):
+        return VisaCard()
+
+class MasterCardFactory(CreditCardFactory):
+    def create_credit_card(self):
+        return MasterCard()
+
+
+
+
+
 
 def all_cards(request):
     account = Account.objects.get(user=request.user)
@@ -109,3 +157,4 @@ def fund_credit_card(request, card_id):
             messages.warning(request, "Insufficient Funds")
             return redirect("core:card-detail", credit_card.card_id)
             
+

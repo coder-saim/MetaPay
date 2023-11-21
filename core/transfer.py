@@ -7,7 +7,43 @@ from decimal import Decimal
 from core.models import Transaction, Notification
  
 
-@login_required
+
+def login_required_decorator(func):
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return func(request, *args, **kwargs)
+        else:
+            messages.warning(request, "You need to log in.")
+            return redirect("account:login")
+    return wrapper
+
+
+def validate_amount_decorator(func):
+    def wrapper(request, *args, **kwargs):
+        amount = request.POST.get("amount-send")
+        if not amount or not amount.isdigit() or Decimal(amount) <= 0:
+            messages.warning(request, "Invalid amount.")
+            return redirect("core:amount-transfer", kwargs['account_number'])
+        return func(request, *args, **kwargs)
+    return wrapper
+
+
+def validate_pin_decorator(func):
+    def wrapper(request, *args, **kwargs):
+        pin_number = request.POST.get("pin-number")
+        sender_account = request.user.account
+        if not pin_number or pin_number != sender_account.pin_number:
+            messages.warning(request, "Incorrect Pin.")
+            return redirect('core:transfer-confirmation', kwargs['account_number'], kwargs['transaction_id'])
+        return func(request, *args, **kwargs)
+    return wrapper
+
+
+
+
+
+
+@login_required_decorator
 def search_users_account_number(request):
     # account = Account.objects.filter(account_status="active")
     account = Account.objects.all()
@@ -27,6 +63,9 @@ def search_users_account_number(request):
     return render(request, "transfer/search-user-by-account-number.html", context)
 
 
+
+@staticmethod
+@login_required_decorator
 def AmountTransfer(request, account_number):
     try:
         account = Account.objects.get(account_number=account_number)
@@ -39,6 +78,10 @@ def AmountTransfer(request, account_number):
     return render(request, "transfer/amount-transfer.html", context)
 
 
+
+@staticmethod
+@login_required_decorator
+@validate_amount_decorator
 def AmountTransferProcess(request, account_number):
     account = Account.objects.get(account_number=account_number) ## Get the account that the money vould be sent to
     sender = request.user # get the person that is logged in
@@ -79,6 +122,9 @@ def AmountTransferProcess(request, account_number):
         return redirect("account:account")
 
 
+
+@staticmethod
+@login_required_decorator
 def TransferConfirmation(request, account_number, transaction_id):
     try:
         account = Account.objects.get(account_number=account_number)
@@ -93,6 +139,10 @@ def TransferConfirmation(request, account_number, transaction_id):
     return render(request, "transfer/transfer-confirmation.html", context)
 
 
+
+@staticmethod
+@login_required_decorator
+@validate_pin_decorator
 def TransferProcess(request, account_number, transaction_id):
     account = Account.objects.get(account_number=account_number)
     transaction = Transaction.objects.get(transaction_id=transaction_id)
@@ -149,6 +199,8 @@ def TransferProcess(request, account_number, transaction_id):
     
 
 
+
+
 def TransferCompleted(request, account_number, transaction_id):
     try:
         account = Account.objects.get(account_number=account_number)
@@ -161,3 +213,5 @@ def TransferCompleted(request, account_number, transaction_id):
         "transaction":transaction
     }
     return render(request, "transfer/transfer-completed.html", context)
+
+
